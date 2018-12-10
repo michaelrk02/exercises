@@ -5,8 +5,8 @@ using namespace std;
 
 void print_zigzag(string s, int width)
 {
-    int r = 1;
-    int len = s.length() + ((s.length() % width == 0) ? 0 : width - (s.length() % width));
+    int r = 1; // the row
+    int len = s.length() + ((s.length() % width == 0) ? 0 : width - (s.length() % width)); // make length to the factor of width
     for (int i = 0; i < len; i++)
     {
         if ((i != 0) && (i % width == 0))
@@ -27,7 +27,7 @@ void print_zigzag(string s, int width)
             n = stop - (i - start);
         }
         if (i > s.length() - 1)
-        {
+        { // add missing spaces to form a 'square' shaped string
             cout << ' ';
         }
         else
