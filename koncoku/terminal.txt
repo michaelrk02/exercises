@@ -1,0 +1,6 @@
+Akas 25 1
+Eka 17 2
+Jaya 35 1
+Akas 30 1
+Eka 20 2
+
