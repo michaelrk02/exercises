@@ -1,3 +1,17 @@
+// Aljabar Boolean
+//
+// Deskripsi latihan:
+//  Sebuah Peraga angka digital disusun oleh tujuh buah segmen
+//  (selanjutnya disebut dekoder tujuh-segmen).
+//
+//  Piranti tersebut mengubah masukan 4-bit menjadi keluaran yang
+//  dapat menunjukkan angka desimal yang dinyatakannya
+//  (misalnya, jika masukan adalah 0100 (angka 4 dalam desimal),
+//  maka batang/segmen yang menyala adalah a, d, c, dan e).
+//  Tulislah fungsi Boolean untuk setiap segmen, dan gambarkan
+//  rangkaian kombinasionalnya.
+//
+// Link: http://informatika.stei.itb.ac.id/~rinaldi.munir/Matdis/2019-2020/Aljabar-Boolean-2019.pdf
 #include <iostream>
 #include <vector>
 #include <map>
