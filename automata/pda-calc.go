@@ -7,17 +7,17 @@
 // For example: A + B * (C + D) + E ^ F ^ (G - H)
 // CST representation:
 //
-//    __+__
-//   /     \
-//  A     __+__
-//       /     \
-//      *       ^
-//     / \     / \
-//    B   +   E   ^
-//       / \     / \
-//      C   D   F   -
-//                 / \
-//                G   H
+//
+//      ___+___
+//     /       \
+//    +         ^
+//   / \       / \
+//  A   *     E   ^
+//     / \       / \
+//    B   +     F   -
+//       / \       / \
+//      C   D     G   H
+//
 
 // Another example: A + B + C + D + E
 // CST representation
