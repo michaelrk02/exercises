@@ -54,20 +54,22 @@ func main() {
 
     pda.q[stateIDExpr] = &state{
         trans: func(ch byte) *transition {
-            if isInt(ch) || ch == '-' {
+            if isInt(ch) {
                 self := stk.top()
                 stk.pop()
                 if self != nil {
                     stk.push(&binaryExpr{op: self.(*binaryExpr).op, lhs: self.(*binaryExpr).lhs, rhs: makeExpr(ch)})
                 } else {
-                    if ch != '-' {
-                        stk.push(makeExpr(ch))
-                    } else {
-                        stk.push(&binaryExpr{op: '-', lhs: makeExpr('0'), rhs: nil})
-                        return &transition{q: stateIDExpr}
-                    }
+                    stk.push(makeExpr(ch))
                 }
                 return &transition{q: stateIDInt}
+            }
+            if ch == '-' {
+                if stk.top() == nil {
+                    stk.pop()
+                }
+                stk.push(&binaryExpr{op: '-', lhs: makeExpr('0'), rhs: nil})
+                return &transition{q: stateIDExpr}
             }
             if ch == '(' {
                 if stk.top() == nil {
@@ -120,8 +122,10 @@ func main() {
                 return &transition{q: stateIDExpr}
             }
             if ch == ')' {
-                stk.aggregate()
-                return &transition{q: stateIDBinop, push: 0xFF}
+                if len(pda.stack) > 0 {
+                    stk.aggregate()
+                    return &transition{q: stateIDBinop, push: 0xFF}
+                }
             }
             if ch == 0x00 {
                 stk.aggregateAll()
@@ -142,8 +146,10 @@ func main() {
                 return &transition{q: stateIDExpr}
             }
             if ch == ')' {
-                stk.aggregate()
-                return &transition{q: stateIDBinop, push: 0xFF}
+                if len(pda.stack) > 0 {
+                    stk.aggregate()
+                    return &transition{q: stateIDBinop, push: 0xFF}
+                }
             }
             if ch == 0x00 {
                 stk.aggregateAll()
@@ -343,6 +349,13 @@ func (s *expressionStack) isPow() bool {
     return false
 }
 
+func (s *expressionStack) isNeg() bool {
+    if expr, ok := s.top().(*binaryExpr); ok {
+        return (evaluate(expr.lhs) == 0.0) && (expr.op == '-')
+    }
+    return false
+}
+
 func (s *expressionStack) top() expression {
     return (*s)[len(*s) - 1]
 }
@@ -360,7 +373,13 @@ func (s *expressionStack) pop() {
 
 func (s *expressionStack) insertOp(ch byte) {
     if (isMulDiv(ch) && s.isAddSub()) || (ch == '^') {
-        s.push(&binaryExpr{op: ch, lhs: s.top().(*binaryExpr).rhs, rhs: nil})
+        if (ch == '^') && s.isNeg() {
+            self := s.top()
+            s.pop()
+            s.push(&binaryExpr{op: '^', lhs: self, rhs: nil})
+        } else {
+            s.push(&binaryExpr{op: ch, lhs: s.top().(*binaryExpr).rhs, rhs: nil})
+        }
     } else {
         if (ch != '^') {
             for s.isPow() {
