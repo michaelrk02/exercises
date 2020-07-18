@@ -19,6 +19,19 @@
 //                 / \
 //                G   H
 
+// Another example: A + B + C + D + E
+// CST representation
+//
+//          +
+//         / \
+//        +   E
+//       / \
+//      +   D
+//     / \
+//    +   C
+//   / \
+//  A   B
+
 // Context-Free Grammar:
 //  E -> I | F | E op E | (E)
 //  I -> int | int I | - int | - int I
