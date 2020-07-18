@@ -358,6 +358,15 @@ func (s *expressionStack) insertOp(ch byte) {
     if (isMulDiv(ch) && s.isAddSub()) || (ch == '^') {
         s.push(&binaryExpr{op: ch, lhs: s.top().(*binaryExpr).rhs, rhs: nil})
     } else {
+        if (ch != '^') {
+            for s.isPow() {
+                s.aggregate()
+            }
+        }
+        if s.isMulDiv() && isAddSub(ch) {
+            s.aggregate()
+        }
+
         self := s.top()
         s.pop()
         s.push(&binaryExpr{op: ch, lhs: self, rhs: nil})
