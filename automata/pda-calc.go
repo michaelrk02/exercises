@@ -33,9 +33,9 @@
 //  A   B
 
 // Context-Free Grammar:
-//  E -> I | F | E op E | (E)
-//  I -> int | int I | - int | - int I
-//  F -> I.I
+//  E -> I | F | E op E | ( E ) | - E
+//  I -> int | int I
+//  F -> I . I
 //  int -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 //  op -> + | - | * | / | ^
 
@@ -60,7 +60,12 @@ func main() {
                 if self != nil {
                     stk.push(&binaryExpr{op: self.(*binaryExpr).op, lhs: self.(*binaryExpr).lhs, rhs: makeExpr(ch)})
                 } else {
-                    stk.push(makeExpr(ch))
+                    if ch != '-' {
+                        stk.push(makeExpr(ch))
+                    } else {
+                        stk.push(&binaryExpr{op: '-', lhs: makeExpr('0'), rhs: nil})
+                        return &transition{q: stateIDExpr}
+                    }
                 }
                 return &transition{q: stateIDInt}
             }
