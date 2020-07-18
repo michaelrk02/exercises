@@ -73,8 +73,10 @@ func main() {
                 return &transition{q: stateIDExpr, push: 1}
             }
             if ch == 0x00 {
-                stk.aggregateAll()
-                return &transition{q: stateIDExpr}
+                if stk.top().(*binaryExpr).rhs != nil {
+                    stk.aggregateAll()
+                    return &transition{q: stateIDExpr}
+                }
             }
             return &transition{q: stateIDError}
         },
