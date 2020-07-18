@@ -363,7 +363,7 @@ func (s *expressionStack) insertOp(ch byte) {
                 s.aggregate()
             }
         }
-        if s.isMulDiv() && isAddSub(ch) {
+        if (len(*s) > 1) && s.isMulDiv() && isAddSub(ch) {
             s.aggregate()
         }
 
