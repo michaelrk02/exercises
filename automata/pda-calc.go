@@ -318,6 +318,13 @@ func evaluate(expr expression) float64 {
 
 type expressionStack []expression
 
+func (s *expressionStack) isAddSub() bool {
+    if expr, ok := s.top().(*binaryExpr); ok {
+        return isAddSub(expr.op)
+    }
+    return true
+}
+
 func (s *expressionStack) isMulDiv() bool {
     if expr, ok := s.top().(*binaryExpr); ok {
         return isMulDiv(expr.op)
@@ -348,7 +355,7 @@ func (s *expressionStack) pop() {
 }
 
 func (s *expressionStack) insertOp(ch byte) {
-    if (isMulDiv(ch) && !s.isMulDiv()) || (ch == '^') {
+    if (isMulDiv(ch) && s.isAddSub()) || (ch == '^') {
         s.push(&binaryExpr{op: ch, lhs: s.top().(*binaryExpr).rhs, rhs: nil})
     } else {
         self := s.top()
