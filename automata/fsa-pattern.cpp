@@ -15,9 +15,10 @@
 // Q2 will redirect to Q3 when it receives letter 'o', and so on until it reaches the final state (Qn a.k.a. last character in a pattern)
 //
 // When the automata encounters an asterisk, it will set its fallback state to Qa where 'a' represents a state corresponds to the asterisk character in a pattern.
+// It also implies that Qa redirects itself to its own state to indicate that an asterisk accepts any character that's fed to it.
 // But that's not enough. We also need to redirect Q(a-1) and Q(a) when they receive the next character in the pattern (after the asterisk symbol, in this case, b) to Q(a+1).
 // Why Q(a-1) also? Because that will handle an empty wildcard too :)
-// Then we need to redirect Qi..Qj (i = a+1, and Qj is the last consecutive state that does NOT contain an asterisk in its corresponding pattern) when they encounter the character after the asterisk to Q(a+1). This is useful in case the string immediately matches the pattern after a set of unknown chatacters.
+// Then we need to redirect Qi..Qj (i = a+1, and Qj is the last consecutive state that does NOT contain an asterisk in its corresponding pattern) when they encounter the character after the asterisk to Q(a+1). This is useful in case the string immediately matches the pattern after a set of unknown characters.
 // But there's one more thing. What if the pattern contains *aaa (i.e. a set of C consecutive characters, in this case C=3 and the character is 'a')?
 // The solution to deal with that problem is actually simple. Just redirect Qx to its own state when receiving the same character, where x=a+C
 
