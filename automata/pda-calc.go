@@ -7,15 +7,17 @@
 // For example: A + B * (C + D) + E ^ F ^ (G - H)
 // CST representation:
 //
-//      ____+____
-//     /         \
-//    +           ^
-//   / \         / \
-//  A   *       E   ^
-//     / \         / \
-//    B   +       F   -
-//       / \         / \
-//      C   D       G   H
+//    __+__
+//   /     \
+//  A     __+__
+//       /     \
+//      *       ^
+//     / \     / \
+//    B   +   E   ^
+//       / \     / \
+//      C   D   F   -
+//                 / \
+//                G   H
 
 // Context-Free Grammar:
 //  E -> I | F | E op E | (E)
