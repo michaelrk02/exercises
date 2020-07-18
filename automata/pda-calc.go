@@ -313,7 +313,6 @@ func evaluate(expr expression) float64 {
         }
     }
     panic("unknown expression type")
-    return 0.0
 }
 
 type expressionStack []expression
@@ -322,7 +321,7 @@ func (s *expressionStack) isAddSub() bool {
     if expr, ok := s.top().(*binaryExpr); ok {
         return isAddSub(expr.op)
     }
-    return true
+    return false // unary expressions ain't considered to be an add/sub operation
 }
 
 func (s *expressionStack) isMulDiv() bool {
