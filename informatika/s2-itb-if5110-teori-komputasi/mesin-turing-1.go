@@ -96,9 +96,7 @@ func main() {
         fmt.Printf("input: ")
         fmt.Scanf("%s", &s)
 
-        in := make([]byte, len(s) * 2)
-        copy(in, s)
-        fmt.Printf("Accepted: %v\n", tm.Accepts(string(in)))
+        fmt.Printf("Accepted: %v\n", tm.Accepts(s))
     }
 }
 
