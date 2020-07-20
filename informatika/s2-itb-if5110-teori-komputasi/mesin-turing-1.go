@@ -5,139 +5,100 @@ package main
 
 import (
     "fmt"
-    "math/rand"
-    "time"
+    "github.com/michaelrk02/automata"
 )
 
-func validate(str string) bool {
-    input := []byte(str)
-    state := 0
-    i := 0
-    for {
-        if i > len(input) - 1 {
-            break
-        }
-        sym := input[i]
-        if state == 0 {
-            if sym == '0' {
-                state = 1
-                input[i] = 'X'
-                i++
-                continue
-            }
-            if sym == '1' {
-                state = 3
-                input[i] = 'Y'
-                i++
-                continue
-            }
-            if sym == 'X' || sym == 'Y' {
-                i++
-                continue
-            }
-        }
-        if state == 1 {
-            if sym == '0' || sym == 'X' || sym == 'Y' {
-                i++
-                continue
-            }
-            if sym == '1' {
-                state = 2
-                input[i] = 'Y'
-                i--
-                continue
-            }
-        }
-        if state == 2 {
-            if sym == '0' || sym == '1' || sym == 'Y' {
-                i--
-                continue
-            }
-            if sym == 'X' {
-                i++
-                state = 0
-                continue
-            }
-        }
-        if state == 3 {
-            if sym == '1' || sym == 'X' || sym == 'Y' {
-                i++
-                continue
-            }
-            if sym == '0' {
-                state = 4
-                input[i] = 'X'
-                i--
-                continue
-            }
-        }
-        if state == 4 {
-            if sym == '0' || sym == '1' || sym == 'X' {
-                i--
-                continue
-            }
-            if sym == 'Y' {
-                i++
-                state = 0
-                continue
-            }
-        }
-    }
-
-    return state == 0
-}
-
-func shuffle(s []byte) []byte {
-    length := len(s)
-    mapping := make([]int, length)
-    available := make([]int, length)
-    shuffled := make([]byte, length)
-    for i := 0; i < length; i++ {
-        available[i] = i
-    }
-    for i := 0; i < length; i++ {
-        index := rand.Intn(len(available))
-        mapping[i] = available[index]
-        available = append(available[0:index], available[index + 1:]...)
-    }
-    for i := 0; i < length; i++ {
-        shuffled[i] = s[mapping[i]]
-    }
-    return shuffled
-}
-
 func main() {
-    rand.Seed(time.Now().Unix())
-    for {
-        var expectCh string
-        fmt.Printf("Expect truthness? (Y/N) ")
-        fmt.Scanf("%s", &expectCh)
+    tm := automata.NewTuringMachine(7, 0, 5, 6)
 
-        var length int
-        fmt.Printf("Random string length: ")
-        fmt.Scanf("%d", &length)
+    tm.States[0] = func(token byte) (int, byte, automata.TMHeadDir) {
+        switch token {
+        case 'X':
+            return 0, 'X', automata.TMHeadDirRight
+        case 'Y':
+            return 0, 'Y', automata.TMHeadDirRight
+        case '0':
+            return 1, 'X', automata.TMHeadDirRight
+        case '1':
+            return 3, 'Y', automata.TMHeadDirRight
+        case 0x00:
+            return 5, 0x00, automata.TMHeadDirRight
+        }
+        return 6, token, automata.TMHeadDirRight
+    }
 
-        expect := expectCh == "Y" || expectCh == "y"
-        if expect && length % 2 == 1 {
-            fmt.Printf("String length must be an even number!\n")
-            continue
+    tm.States[1] = func(token byte) (int, byte, automata.TMHeadDir) {
+        switch token {
+        case 'X':
+            return 1, 'X', automata.TMHeadDirRight
+        case 'Y':
+            return 1, 'Y', automata.TMHeadDirRight
+        case '0':
+            return 1, '0', automata.TMHeadDirRight
+        case '1':
+            return 2, 'Y', automata.TMHeadDirLeft
         }
+        return 6, token, automata.TMHeadDirRight
+    }
 
-        input := make([]byte, length)
-        count0 := length / 2
-        if !expect {
-            count0 = rand.Intn(length + 1)
+    tm.States[2] = func(token byte) (int, byte, automata.TMHeadDir) {
+        switch token {
+        case '0':
+            return 2, '0', automata.TMHeadDirLeft
+        case '1':
+            return 2, '1', automata.TMHeadDirLeft
+        case 'X':
+            return 0, 'X', automata.TMHeadDirRight
+        case 'Y':
+            return 2, 'Y', automata.TMHeadDirLeft
         }
-        for i := 0; i < count0; i++ {
-            input[i] = '0'
-        }
-        for i := count0; i < length; i++ {
-            input[i] = '1'
-        }
-        input = shuffle(input)
+        return 6, token, automata.TMHeadDirRight
+    }
 
-        str := string(input)
-        fmt.Printf("String: %s\n", str)
-        fmt.Printf("Result: %v\n", validate(str))
+    tm.States[3] = func(token byte) (int, byte, automata.TMHeadDir) {
+        switch token {
+        case 'X':
+            return 3, 'X', automata.TMHeadDirRight
+        case 'Y':
+            return 3, 'Y', automata.TMHeadDirRight
+        case '0':
+            return 4, 'X', automata.TMHeadDirLeft
+        case '1':
+            return 3, '1', automata.TMHeadDirRight
+        }
+        return 6, token, automata.TMHeadDirRight
+    }
+
+    tm.States[4] = func(token byte) (int, byte, automata.TMHeadDir) {
+        switch token {
+        case '0':
+            return 4, '0', automata.TMHeadDirLeft
+        case '1':
+            return 4, '1', automata.TMHeadDirLeft
+        case 'X':
+            return 4, 'X', automata.TMHeadDirLeft
+        case 'Y':
+            return 0, 'Y', automata.TMHeadDirRight
+        }
+        return 6, token, automata.TMHeadDirRight
+    }
+
+    tm.States[5] = func(token byte) (int, byte, automata.TMHeadDir) {
+        return 5, token, automata.TMHeadDirRight
+    }
+
+    tm.States[6] = func(token byte) (int, byte, automata.TMHeadDir) {
+        return 6, token, automata.TMHeadDirRight
+    }
+
+    for true {
+        var s string
+        fmt.Printf("input: ")
+        fmt.Scanf("%s", &s)
+
+        in := make([]byte, len(s) * 2)
+        copy(in, s)
+        fmt.Printf("Accepted: %v\n", tm.Accepts(string(in)))
     }
 }
+
