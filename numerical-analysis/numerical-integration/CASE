@@ -1,0 +1,9 @@
+[pi]
+Calculate the area under the curve of 4/(x^2 + 1) in [0, 1] range (should approximate the value of pi).
+
+[cos]
+Calculate the area under the curve of cos(x) in [-pi/2, pi/2] range.
+
+[normdist]
+Calculate the area under the curve of normal distribution in [-inf, inf] range (should give the answer of 1).
+

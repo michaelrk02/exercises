@@ -1,0 +1,3 @@
+Make an app which takes N inputs of M lines where N = M+1.
+On each line, the first M numbers denotes the coefficients of M variables (will be considered as left-hand expression).
+Then the last number of each line denotes the right-hand constant of the left-hand expression.
