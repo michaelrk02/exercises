@@ -1,0 +1,3 @@
+[interpolate]
+Given N (x, y) relations with y = f(x), then determine interpolation function p(x) and then predict the value of y = f(x) using y = p(x)
+
