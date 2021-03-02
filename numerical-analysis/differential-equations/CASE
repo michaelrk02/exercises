@@ -1,0 +1,13 @@
+[pendulum]
+Solve the ODE of a pendulum with given air resistance numerically: determine the angle at a given time point
+
+[heat]
+Solve the PDE of a heat equation numerically: determine the temperature at specific point in space and time
+
+[heat2d]
+Solve the PDE of a heat equation in 2D space numerically: determine the temperature at specific point in space and time
+
+> Use whatever method you want (RK4 is a good choice)
+> If possible, visualize & animate the results with respect to time change (using multimedia library like SFML or other)
+> If possible, use GPGPU library (like OpenCL) to accelerate the computation
+

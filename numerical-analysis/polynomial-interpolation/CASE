@@ -1,3 +1,8 @@
 [interpolate]
 Given N (x, y) relations with y = f(x), then determine interpolation function p(x) and then predict the value of y = f(x) using y = p(x)
 
+[interpolate-trend]
+Given N (x, y) relations with y = f(x), then determine the interpolating trend function p(x) and then predict the value of y = f(x) using y = p(x)
+
+> If possible, visualize the data dan plot the interpolating function in a 2D space (using multimedia library like SFML or other)
+
